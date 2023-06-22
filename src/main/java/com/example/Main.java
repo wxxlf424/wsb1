@@ -127,25 +127,48 @@ public class Main {
                 productQuantityMap.put(product, productQuantityMap.getOrDefault(product, 0) + 1);
             }
 
+            double totalPrice = 0.0; // Zmienna przechowująca kwotę całkowitą
+
             for (Map.Entry<Product, Integer> entry : productQuantityMap.entrySet()) {
                 Product product = entry.getKey();
                 int quantity = entry.getValue();
+                double productTotalPrice = quantity * product.getPrice();
+                totalPrice += productTotalPrice;
+
                 System.out.println(quantity + "x " + product.getName() + " (cena: " + product.getPrice() + ")");
             }
 
-            double totalPrice = shoppingCart.calculateTotalPrice();
-            System.out.println("Suma cen: " + totalPrice);
+            System.out.println("Kwota do zapłaty: " + totalPrice);
         }
     }
-
+    
     private static void editShoppingCart(ShoppingCart shoppingCart, Scanner scanner) {
-        displayShoppingCart(shoppingCart);
+        List<Product> cartProducts = shoppingCart.getProducts();
+
+        if (cartProducts.isEmpty()) {
+            System.out.println("Koszyk jest pusty.");
+            return;
+        }
+
+        System.out.println("Zawartość koszyka:");
+        Map<Product, Integer> productQuantityMap = new HashMap<>();
+        for (Product product : cartProducts) {
+            productQuantityMap.put(product, productQuantityMap.getOrDefault(product, 0) + 1);
+        }
+
+        int index = 1;
+        for (Product product : cartProducts) {
+            int quantity = productQuantityMap.get(product);
+            System.out.println(index + ". " + quantity + "x " + product.getName() + " (cena: " + product.getPrice() + ")");
+            index++;
+        }
 
         System.out.println("Wybierz numer produktu, który chcesz usunąć z koszyka (0 aby anulować):");
         int selection = scanner.nextInt();
 
-        if (selection >= 1 && selection <= shoppingCart.getProducts().size()) {
-            shoppingCart.getProducts().remove(selection - 1);
+        if (selection >= 1 && selection <= cartProducts.size()) {
+            Product selectedProduct = cartProducts.get(selection - 1);
+            shoppingCart.getProducts().remove(selectedProduct);
             System.out.println("Produkt usunięty z koszyka.");
         } else if (selection == 0) {
             System.out.println("Anulowano.");
@@ -156,10 +179,17 @@ public class Main {
 
     private static void processProducts(ShoppingCart shoppingCart, ProductService productService) {
         System.out.println("Przetwarzanie produktów w koszyku:");
-        for (Product product : shoppingCart.getProducts()) {
-            productService.processProduct(product);
+        System.out.println("Czy chcesz zatwierdzić koszyk? (T/N): ");
+        
+        Scanner scanner = new Scanner(System.in);
+        String response = scanner.next();
+        scanner.close();
+        
+        if (response.equalsIgnoreCase("T")) {
+            System.out.println("Zakup został zaakceptowany.");
+            shoppingCart.clearCart();
+        } else {
+            System.out.println("Zakup został anulowany.");
         }
-        System.out.println("Przetwarzanie zakończone.");
-        shoppingCart.clearCart();
     }
 }
