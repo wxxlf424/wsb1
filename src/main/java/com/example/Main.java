@@ -3,6 +3,7 @@ package com.example;
 import com.example.model.Product;
 import com.example.model.ShoppingCart;
 import com.example.service.ProductService;
+import com.example.Colors;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,15 +23,15 @@ public class Main {
         List<Product> availableProducts = readProductsFromFile("products.txt");
 
         while (true) {
-            System.out.println("======= Menu =======");
+            System.out.println(Colors.GREEN + "======= Menu =======" + Colors.RESET);
             System.out.println("1. Wyświetl dostępne produkty");
             System.out.println("2. Dodaj produkt do koszyka");
             System.out.println("3. Podgląd koszyka");
             System.out.println("4. Wyczyść koszyk");
             System.out.println("5. Zrealizuj produkty w koszyku");
-            System.out.println("6. Zakończ");
+            System.out.println(Colors.RED + "6. Zakończ" + Colors.RESET);
 
-            System.out.print("Wybierz opcję: ");
+            System.out.print(Colors.YELLOW + "Wybierz opcję: " + Colors.RESET);
             int option = scanner.nextInt();
 
             switch (option) {
@@ -78,14 +79,14 @@ public class Main {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Błąd odczytu pliku: " + e.getMessage());
+            System.out.println(Colors.RED + "Błąd odczytu pliku: " + e.getMessage() + Colors.RESET);
         }
 
         return products;
     }
 
     private static void displayAvailableProducts(List<Product> availableProducts) {
-        System.out.println("Dostępne produkty:");
+        System.out.println(Colors.GREEN + "Dostępne produkty:" + Colors.RESET);
         for (int i = 0; i < availableProducts.size(); i++) {
             Product product = availableProducts.get(i);
             System.out.println((i + 1) + ". " + product.getName() + " (cena: " + product.getPrice() + ")");
@@ -93,23 +94,22 @@ public class Main {
     }
 
     private static void addProductToCart(List<Product> availableProducts, ShoppingCart shoppingCart, Scanner scanner) {
-        System.out.println("Wybierz numer produktu, który chcesz dodać do koszyka:");
         displayAvailableProducts(availableProducts);
-
+        System.out.print(Colors.YELLOW + "Wybierz numer produktu, który chcesz dodać do koszyka: " + Colors.RESET);
         int selection = scanner.nextInt();
         if (selection >= 1 && selection <= availableProducts.size()) {
             Product selectedProduct = availableProducts.get(selection - 1);
 
-            System.out.print("Podaj ilość: ");
+            System.out.print(Colors.CYAN + "Podaj ilość: " + Colors.RESET);
             int quantity = scanner.nextInt();
 
             for (int i = 0; i < quantity; i++) {
                 shoppingCart.addProduct(selectedProduct);
             }
 
-            System.out.println("Produkt dodany do koszyka.");
+            System.out.println(Colors.GREEN + "Produkt dodany do koszyka." + Colors.RESET);
         } else {
-            System.out.println("Nieprawidłowy numer produktu.");
+            System.out.println(Colors.RED + "Nieprawidłowy numer produktu." + Colors.RESET);
         }
     }
 
@@ -117,9 +117,9 @@ public class Main {
         List<Product> cartProducts = shoppingCart.getProducts();
 
         if (cartProducts.isEmpty()) {
-            System.out.println("Koszyk jest pusty.");
+            System.out.println(Colors.BLUE + "Koszyk jest pusty." + Colors.RESET);
         } else {
-            System.out.println("Zawartość koszyka:");
+            System.out.println(Colors.GREEN + "Zawartość koszyka:" + Colors.RESET);
 
             // Tworzenie mapy ilości produktów
             Map<Product, Integer> productQuantityMap = new HashMap<>();
@@ -134,27 +134,20 @@ public class Main {
                 int quantity = entry.getValue();
                 double productTotalPrice = quantity * product.getPrice();
                 totalPrice += productTotalPrice;
+                
+                totalPrice = Math.round(totalPrice * 100.0) / 100.0; // Zaokrąglenie do dwóch miejsc po przecinku
+
 
                 System.out.println(quantity + "x " + product.getName() + " (cena: " + product.getPrice() + ")");
             }
 
-            System.out.println("Kwota do zapłaty: " + totalPrice);
+            System.out.println(Colors.CYAN + "Kwota do zapłaty: " + Colors.YELLOW + totalPrice + Colors.RESET);
         }
     }
     
     private static void processProducts(ShoppingCart shoppingCart, ProductService productService) {
-        System.out.println("Przetwarzanie produktów w koszyku:");
-        System.out.println("Czy chcesz zatwierdzić koszyk? (T/N): ");
-        
-        Scanner scanner = new Scanner(System.in);
-        String response = scanner.next();
-        scanner.close();
-        
-        if (response.equalsIgnoreCase("T")) {
-            System.out.println("Zakup został zaakceptowany.");
-            shoppingCart.clearCart();
-        } else {
-            System.out.println("Zakup został anulowany.");
-        }
+        System.out.println(Colors.GREEN + "Przetwarzanie produktów w koszyku:" + Colors.RESET);
+        productService.processProduct(shoppingCart);
     }
+
 }

@@ -1,8 +1,11 @@
 package com.example.service;
+import com.example.Colors;
 import com.example.model.Product;
+import com.example.model.ShoppingCart;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ProductService {
     private List<Product> shoppingCart;
@@ -15,25 +18,25 @@ public class ProductService {
         shoppingCart.add(product);
     }
 
-    public void calculateTotalPrice() {
+    public double calculateTotalPrice() {
         double totalPrice = 0.0;
         for (Product product : shoppingCart) {
             totalPrice += product.getPrice();
         }
-        System.out.println("Kwota końcowa: " + totalPrice);
+        return totalPrice;
     }
 
-    public void processProduct(Product product) {
-        System.out.println("Czy chcesz potwierdzić zakup? (T/N)");
-        // Tutaj możesz dodać kod do pobrania odpowiedzi od użytkownika
+    public void processProduct(ShoppingCart shoppingCart) {
+        System.out.print(Colors.YELLOW + "Czy chcesz potwierdzić zakup? " + Colors.RESET + "(" + Colors.GREEN + "T" + Colors.RESET + "/" + Colors.RED + "N" + Colors.RESET + "): " + Colors.RESET);
 
-        // Przykładowa logika potwierdzania zakupu
-        String response = "T";
+        Scanner scanner = new Scanner(System.in);
+        String response = scanner.nextLine();
+
         if (response.equalsIgnoreCase("T")) {
-            System.out.println("Zakup został zaakceptowany.");
-            shoppingCart.clear();
+            System.out.println(Colors.GREEN + "Zakup został zaakceptowany." + Colors.RESET);
+            shoppingCart.clearCart();
         } else {
-            System.out.println("Zakup został anulowany.");
+            System.out.println(Colors.RED + "Zakup został anulowany." + Colors.GREEN);
         }
     }
 }

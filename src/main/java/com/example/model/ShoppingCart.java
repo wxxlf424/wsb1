@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.Colors;
+
 public class ShoppingCart {
     private Map<Product, Integer> products;
 
@@ -44,6 +46,6 @@ public class ShoppingCart {
 
     public void clearCart() {
         products.clear();
-        System.out.println("Koszyk został wyczyszczony!");
+        System.out.println(Colors.GREEN + "Koszyk został wyczyszczony!" + Colors.RESET);
     }
 }
