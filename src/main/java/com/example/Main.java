@@ -3,6 +3,9 @@ package com.example;
 import com.example.model.Product;
 import com.example.model.ShoppingCart;
 import com.example.service.ProductService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,6 +20,7 @@ import java.util.HashMap;
  * Główna klasa aplikacji.
  */
 public class Main {
+	private static final Logger logger = LogManager.getLogger(Main.class);
     /**
      * Metoda główna aplikacji.
      *
@@ -181,7 +185,12 @@ public class Main {
      * @param productService serwis do przetwarzania produktów
      */
     private static void processProducts(ShoppingCart shoppingCart, ProductService productService) {
-        System.out.println(Colors.GREEN + "Przetwarzanie produktów w koszyku:" + Colors.RESET);
-        productService.processProduct(shoppingCart);
+        logger.info("Przetwarzanie produktów w koszyku:");
+        boolean isApproved = productService.processProduct(shoppingCart);
+        if (isApproved) {
+            logger.info("Koszyk został zaakceptowany.");
+        } else {
+            logger.info("Koszyk został odrzucony.");
+        }
     }
 }

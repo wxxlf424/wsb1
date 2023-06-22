@@ -1,6 +1,8 @@
 package com.example.service;
 
 import com.example.Colors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.example.model.Product;
 import com.example.model.ShoppingCart;
 
@@ -52,7 +54,7 @@ public class ProductService {
      *
      * @param shoppingCart koszyk zakupowy
      */
-    public void processProduct(ShoppingCart shoppingCart) {
+    public boolean processProduct(ShoppingCart shoppingCart) {
         System.out.print(Colors.YELLOW + "Czy chcesz potwierdzić zakup? " + Colors.RESET + "(" + Colors.GREEN + "T" + Colors.RESET + "/" + Colors.RED + "N" + Colors.RESET + "): " + Colors.RESET);
 
         Scanner scanner = new Scanner(System.in);
@@ -61,8 +63,10 @@ public class ProductService {
         if (response.equalsIgnoreCase("T")) {
             System.out.println(Colors.GREEN + "Zakup został zaakceptowany." + Colors.RESET);
             shoppingCart.clearCart();
+            return true; // Zatwierdzenie koszyka
         } else {
-            System.out.println(Colors.RED + "Zakup został anulowany." + Colors.RESET);
+            System.out.println(Colors.RED + "Zakup został odrzucony." + Colors.GREEN);
+            return false; // Odrzucenie koszyka
         }
     }
 }
