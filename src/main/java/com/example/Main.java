@@ -26,8 +26,8 @@ public class Main {
             System.out.println("1. Wyświetl dostępne produkty");
             System.out.println("2. Dodaj produkt do koszyka");
             System.out.println("3. Podgląd koszyka");
-            System.out.println("4. Edytuj koszyk");
-            System.out.println("5. Przetwarzaj produkty w koszyku");
+            System.out.println("4. Wyczyść koszyk");
+            System.out.println("5. Zrealizuj produkty w koszyku");
             System.out.println("6. Zakończ");
 
             System.out.print("Wybierz opcję: ");
@@ -44,7 +44,7 @@ public class Main {
                     displayShoppingCart(shoppingCart);
                     break;
                 case 4:
-                    editShoppingCart(shoppingCart, scanner);
+                	shoppingCart.clearCart();
                     break;
                 case 5:
                     processProducts(shoppingCart, productService);
@@ -142,41 +142,6 @@ public class Main {
         }
     }
     
-    private static void editShoppingCart(ShoppingCart shoppingCart, Scanner scanner) {
-        List<Product> cartProducts = shoppingCart.getProducts();
-
-        if (cartProducts.isEmpty()) {
-            System.out.println("Koszyk jest pusty.");
-            return;
-        }
-
-        System.out.println("Zawartość koszyka:");
-        Map<Product, Integer> productQuantityMap = new HashMap<>();
-        for (Product product : cartProducts) {
-            productQuantityMap.put(product, productQuantityMap.getOrDefault(product, 0) + 1);
-        }
-
-        int index = 1;
-        for (Product product : cartProducts) {
-            int quantity = productQuantityMap.get(product);
-            System.out.println(index + ". " + quantity + "x " + product.getName() + " (cena: " + product.getPrice() + ")");
-            index++;
-        }
-
-        System.out.println("Wybierz numer produktu, który chcesz usunąć z koszyka (0 aby anulować):");
-        int selection = scanner.nextInt();
-
-        if (selection >= 1 && selection <= cartProducts.size()) {
-            Product selectedProduct = cartProducts.get(selection - 1);
-            shoppingCart.getProducts().remove(selectedProduct);
-            System.out.println("Produkt usunięty z koszyka.");
-        } else if (selection == 0) {
-            System.out.println("Anulowano.");
-        } else {
-            System.out.println("Nieprawidłowy numer produktu.");
-        }
-    }
-
     private static void processProducts(ShoppingCart shoppingCart, ProductService productService) {
         System.out.println("Przetwarzanie produktów w koszyku:");
         System.out.println("Czy chcesz zatwierdzić koszyk? (T/N): ");
