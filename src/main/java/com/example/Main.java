@@ -3,7 +3,6 @@ package com.example;
 import com.example.model.Product;
 import com.example.model.ShoppingCart;
 import com.example.service.ProductService;
-import com.example.Colors;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,7 +13,15 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * Główna klasa aplikacji.
+ */
 public class Main {
+    /**
+     * Metoda główna aplikacji.
+     *
+     * @param args argumenty wiersza poleceń
+     */
     public static void main(String[] args) {
         ShoppingCart shoppingCart = new ShoppingCart();
         ProductService productService = new ProductService();
@@ -45,7 +52,7 @@ public class Main {
                     displayShoppingCart(shoppingCart);
                     break;
                 case 4:
-                	shoppingCart.clearCart();
+                    shoppingCart.clearCart();
                     break;
                 case 5:
                     processProducts(shoppingCart, productService);
@@ -62,6 +69,12 @@ public class Main {
         }
     }
 
+    /**
+     * Wczytuje produkty z pliku.
+     *
+     * @param fileName nazwa pliku
+     * @return lista wczytanych produktów
+     */
     private static List<Product> readProductsFromFile(String fileName) {
         List<Product> products = new ArrayList<>();
 
@@ -85,6 +98,11 @@ public class Main {
         return products;
     }
 
+    /**
+     * Wyświetla dostępne produkty.
+     *
+     * @param availableProducts lista dostępnych produktów
+     */
     private static void displayAvailableProducts(List<Product> availableProducts) {
         System.out.println(Colors.GREEN + "Dostępne produkty:" + Colors.RESET);
         for (int i = 0; i < availableProducts.size(); i++) {
@@ -93,6 +111,13 @@ public class Main {
         }
     }
 
+    /**
+     * Dodaje produkt do koszyka.
+     *
+     * @param availableProducts lista dostępnych produktów
+     * @param shoppingCart      koszyk zakupowy
+     * @param scanner           obiekt Scanner do odczytu danych wejściowych
+     */
     private static void addProductToCart(List<Product> availableProducts, ShoppingCart shoppingCart, Scanner scanner) {
         displayAvailableProducts(availableProducts);
         System.out.print(Colors.YELLOW + "Wybierz numer produktu, który chcesz dodać do koszyka: " + Colors.RESET);
@@ -113,6 +138,11 @@ public class Main {
         }
     }
 
+    /**
+     * Wyświetla zawartość koszyka.
+     *
+     * @param shoppingCart koszyk zakupowy
+     */
     private static void displayShoppingCart(ShoppingCart shoppingCart) {
         List<Product> cartProducts = shoppingCart.getProducts();
 
@@ -134,9 +164,8 @@ public class Main {
                 int quantity = entry.getValue();
                 double productTotalPrice = quantity * product.getPrice();
                 totalPrice += productTotalPrice;
-                
-                totalPrice = Math.round(totalPrice * 100.0) / 100.0; // Zaokrąglenie do dwóch miejsc po przecinku
 
+                totalPrice = Math.round(totalPrice * 100.0) / 100.0; // Zaokrąglenie do dwóch miejsc po przecinku
 
                 System.out.println(quantity + "x " + product.getName() + " (cena: " + product.getPrice() + ")");
             }
@@ -144,10 +173,15 @@ public class Main {
             System.out.println(Colors.CYAN + "Kwota do zapłaty: " + Colors.YELLOW + totalPrice + Colors.RESET);
         }
     }
-    
+
+    /**
+     * Przetwarza produkty w koszyku.
+     *
+     * @param shoppingCart    koszyk zakupowy
+     * @param productService serwis do przetwarzania produktów
+     */
     private static void processProducts(ShoppingCart shoppingCart, ProductService productService) {
         System.out.println(Colors.GREEN + "Przetwarzanie produktów w koszyku:" + Colors.RESET);
         productService.processProduct(shoppingCart);
     }
-
 }

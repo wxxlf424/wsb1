@@ -1,5 +1,9 @@
 package com.example;
 
+/**
+ * Klasa Colors definiuje stałe reprezentujące różne kolory w terminalu, które można używać do formatowania tekstu w wyjściu konsoli. 
+ * Każda zmienna statyczna przechowuje sekwencję ucieczki ANSI, która odpowiada danemu kolorowi. 
+ */
 public class Colors {
     public static final String RESET = "\u001B[0m";
     public static final String BLACK = "\u001B[30m";
