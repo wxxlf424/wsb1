@@ -9,7 +9,11 @@ public class Product {
         this.price = price;
     }
 
-    // Gettery i settery
+    public String getName() {
+        return name;
+    }
 
-    // Inne metody publiczne
+    public double getPrice() {
+        return price;
+    }
 }

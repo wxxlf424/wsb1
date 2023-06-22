@@ -14,5 +14,7 @@ public class ShoppingCart {
         products.add(product);
     }
 
-    // Inne metody publiczne
+    public List<Product> getProducts() {
+        return products;
+    }
 }

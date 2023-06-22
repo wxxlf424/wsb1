@@ -15,6 +15,7 @@ public class Main {
 
         ProductService productService = new ProductService();
         for (Product product : shoppingCart.getProducts()) {
+        	
             productService.processProduct(product);
         }
     }
