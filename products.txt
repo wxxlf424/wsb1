@@ -1,0 +1,6 @@
+Mleko;2.59
+Jajka;11.99
+Chleb;3.49
+Ser żółty;8.33
+Bułka;0.33
+Masło;5.99
